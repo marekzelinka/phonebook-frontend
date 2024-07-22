@@ -28,9 +28,12 @@ function App() {
     let personObject = {
       name,
       number,
-      id: persons.length + 1,
     }
-    setPersons((persons) => persons.concat(personObject))
+    axios
+      .post('http://localhost:3000/persons', personObject)
+      .then(({ data }) => {
+        setPersons((persons) => persons.concat(data))
+      })
 
     return { status: 'success' }
   }
