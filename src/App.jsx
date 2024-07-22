@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Alert } from './components/Alert.jsx'
 import { Filter } from './components/Filter.jsx'
 import { PersonForm } from './components/PersonForm.jsx'
 import { PersonList } from './components/PersonList.jsx'
@@ -12,6 +13,12 @@ import {
 function App() {
   let [persons, setPersons] = useState([])
   let [filter, setFilter] = useState('')
+  let [notification, setNotification] = useState(null)
+
+  function notify({ status = 'success', message, timeOutMs = 5000 }) {
+    setNotification({ status, message })
+    window.setTimeout(() => setNotification(null), timeOutMs)
+  }
 
   useEffect(() => {
     getPersons().then(setPersons)
@@ -47,6 +54,7 @@ function App() {
 
     createPerson(personObject).then((newPerson) => {
       setPersons((persons) => persons.concat(newPerson))
+      notify({ message: `Added ${newPerson.name}` })
     })
 
     return { status: 'success' }
@@ -69,6 +77,9 @@ function App() {
   return (
     <div>
       <h1>Phonebook</h1>
+      {notification ? (
+        <Alert status={notification.status} message={notification.message} />
+      ) : null}
       <Filter value={filter} onChange={setFilter} />
       <h2>Add person</h2>
       <PersonForm onSubmit={addPerson} />
