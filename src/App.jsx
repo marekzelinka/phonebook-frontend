@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 import { Filter } from './components/Filter.jsx'
 import { PersonForm } from './components/PersonForm.jsx'
 import { PersonList } from './components/PersonList.jsx'
-import { createPerson, getPersons } from './services/person.js'
+import {
+  createPerson,
+  deletePersonById,
+  getPersons,
+} from './services/person.js'
 
 function App() {
   let [persons, setPersons] = useState([])
@@ -34,6 +38,19 @@ function App() {
     return { status: 'success' }
   }
 
+  let deletePerson = (id) => {
+    let personToDelete = persons.find((person) => person.id === id)
+
+    let shouldDelete = window.confirm(`Delete ${personToDelete.name}?`)
+    if (!shouldDelete) {
+      return
+    }
+
+    deletePersonById(id).then(() => {
+      setPersons((persons) => persons.filter((person) => person.id !== id))
+    })
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -41,7 +58,7 @@ function App() {
       <h2>Add person</h2>
       <PersonForm onSubmit={addPerson} />
       <h2>Numbers</h2>
-      <PersonList persons={personsToShow} />
+      <PersonList persons={personsToShow} onDelete={deletePerson} />
     </div>
   )
 }
