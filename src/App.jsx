@@ -3,6 +3,7 @@ import { useState } from 'react'
 function App() {
   let [persons, setPersons] = useState([{ name: 'Arto Hellas' }])
   let [newName, setNewName] = useState('')
+  let [newNumber, setNewNumber] = useState('')
 
   return (
     <div>
@@ -20,10 +21,12 @@ function App() {
 
           let personObject = {
             name: newName,
+            number: newNumber,
           }
           setPersons((persons) => persons.concat(personObject))
 
           setNewName('')
+          setNewNumber('')
         }}
       >
         <div>
@@ -37,6 +40,18 @@ function App() {
             required
             value={newName}
             onChange={(event) => setNewName(event.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="number" style={{ display: 'block' }}>
+            Number
+          </label>
+          <input
+            type="text"
+            name="number"
+            id="number"
+            value={newNumber}
+            onChange={(event) => setNewNumber(event.target.value)}
           />
         </div>
         <div>
