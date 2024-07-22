@@ -11,6 +11,13 @@ function App() {
         onSubmit={(event) => {
           event.preventDefault()
 
+          let personWithExistingName = persons.find(
+            (person) => person.name === newName,
+          )
+          if (personWithExistingName) {
+            return window.alert(`${newName} is already added to phonebook`)
+          }
+
           let personObject = {
             name: newName,
           }
