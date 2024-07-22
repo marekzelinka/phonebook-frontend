@@ -1,17 +1,15 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Filter } from './components/Filter.jsx'
 import { PersonForm } from './components/PersonForm.jsx'
 import { PersonList } from './components/PersonList.jsx'
+import { createPerson, getPersons } from './services/person.js'
 
 function App() {
   let [persons, setPersons] = useState([])
   let [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3000/persons')
-      .then(({ data }) => setPersons(data))
+    getPersons().then(setPersons)
   }, [])
 
   let personsToShow = persons.filter((person) =>
@@ -29,11 +27,9 @@ function App() {
       name,
       number,
     }
-    axios
-      .post('http://localhost:3000/persons', personObject)
-      .then(({ data }) => {
-        setPersons((persons) => persons.concat(data))
-      })
+    createPerson(personObject).then((newPerson) => {
+      setPersons((persons) => persons.concat(newPerson))
+    })
 
     return { status: 'success' }
   }
