@@ -69,9 +69,17 @@ function App() {
       return
     }
 
-    deletePersonById(id).then(() => {
-      setPersons((persons) => persons.filter((person) => person.id !== id))
-    })
+    deletePersonById(id)
+      .then(() => {
+        setPersons((persons) => persons.filter((person) => person.id !== id))
+      })
+      .catch(() => {
+        notify({
+          status: 'error',
+          message: `Information of ${personToDelete.name} has already been removed from server`,
+        })
+        setPersons((persons) => persons.filter((person) => person.id !== id))
+      })
   }
 
   return (
