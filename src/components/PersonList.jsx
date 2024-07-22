@@ -1,6 +1,6 @@
 export function PersonList({ persons, onDelete }) {
   return persons.map((person) => (
-    <PersonItem key={person.name} person={person} onDelete={onDelete} />
+    <PersonItem key={person.id} person={person} onDelete={onDelete} />
   ))
 }
 

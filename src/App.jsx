@@ -6,6 +6,7 @@ import {
   createPerson,
   deletePersonById,
   getPersons,
+  updatePersonById,
 } from './services/person.js'
 
 function App() {
@@ -20,17 +21,30 @@ function App() {
     person.name.toLowerCase().includes(filter.toLowerCase()),
   )
 
-  let addPerson = ({ name, number }) => {
-    let personWithExistingName = persons.find((person) => person.name === name)
-    if (personWithExistingName) {
-      window.alert(`${name} is already added to phonebook`)
-      return { status: 'error' }
+  let addPerson = (personObject) => {
+    let existingPerson = persons.find(
+      (person) => person.name === personObject.name,
+    )
+
+    if (
+      existingPerson &&
+      window.confirm(
+        `${personObject.name} is already added to phonebook, replace the old number with a new one?`,
+      )
+    ) {
+      updatePersonById(existingPerson.id, personObject).then(
+        (updatedPerson) => {
+          setPersons((persons) =>
+            persons.map((person) =>
+              person.id === existingPerson.id ? updatedPerson : person,
+            ),
+          )
+        },
+      )
+
+      return { status: 'success' }
     }
 
-    let personObject = {
-      name,
-      number,
-    }
     createPerson(personObject).then((newPerson) => {
       setPersons((persons) => persons.concat(newPerson))
     })
@@ -42,6 +56,7 @@ function App() {
     let personToDelete = persons.find((person) => person.id === id)
 
     let shouldDelete = window.confirm(`Delete ${personToDelete.name}?`)
+
     if (!shouldDelete) {
       return
     }

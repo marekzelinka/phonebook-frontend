@@ -13,3 +13,9 @@ export function createPerson(personObject) {
 export function deletePersonById(id) {
   return axios.delete(`${BASE_URL}/${id}`).then((response) => response.data)
 }
+
+export function updatePersonById(id, personObject) {
+  return axios
+    .put(`${BASE_URL}/${id}`, personObject)
+    .then((response) => response.data)
+}
