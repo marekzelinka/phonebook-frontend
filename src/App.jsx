@@ -39,23 +39,29 @@ function App() {
         `${personObject.name} is already added to phonebook, replace the old number with a new one?`,
       )
     ) {
-      updatePersonById(existingPerson.id, personObject).then(
-        (updatedPerson) => {
+      updatePersonById(existingPerson.id, personObject)
+        .then((updatedPerson) => {
           setPersons((persons) =>
             persons.map((person) =>
               person.id === existingPerson.id ? updatedPerson : person,
             ),
           )
-        },
-      )
+        })
+        .catch((error) => {
+          notify({ status: 'error', message: error.response.data.error })
+        })
 
       return { status: 'success' }
     }
 
-    createPerson(personObject).then((newPerson) => {
-      setPersons((persons) => persons.concat(newPerson))
-      notify({ message: `Added ${newPerson.name}` })
-    })
+    createPerson(personObject)
+      .then((newPerson) => {
+        setPersons((persons) => persons.concat(newPerson))
+        notify({ message: `Added ${newPerson.name}` })
+      })
+      .catch((error) => {
+        notify({ status: 'error', message: error.response.data.error })
+      })
 
     return { status: 'success' }
   }
